@@ -1,0 +1,4 @@
+export URL=https://remoto.gonzalonazareno.org
+echo "Please enter your Guacamole Password for for user admin: "
+read -sr PASSWORD
+export PASSWORD=$PASSWORD
