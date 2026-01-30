@@ -7,7 +7,7 @@ from libldap import LibLDAP
 if len(sys.argv)==3 and (sys.argv[1]=='-a' or sys.argv[1]=='-d'):
     ldap=LibLDAP()
     filtro={}
-    if sys.argv[2] in ['asir1','asir2','smr2','profesores']:
+    if sys.argv[2] in ['asir1','asir2','smr2','profesores','tituladossmr','tituladosasir','antiguosalumnos']:
         filtro["grupo"]=sys.argv[2]
     else:
         filtro["uid"]=sys.argv[2]
@@ -33,9 +33,10 @@ if len(sys.argv)==3 and (sys.argv[1]=='-a' or sys.argv[1]=='-d'):
                 for usuario in lista:
                     conn=session.detail_user_permissions(usuario["uid"][0])
                     conn=json.loads(conn)
-                    for id in conn["connectionPermissions"]:
-                        session.delete_connection(id)
-                        print("Se ha borrado la conexión",id)
+                    if "connectionPermissions" in conn:
+                        for id in conn["connectionPermissions"]:
+                            session.delete_connection(id)
+                            print("Se ha borrado la conexión",id)
                     session.delete_user(usuario["uid"][0])
                     print("Se ha eliminado el usuario",usuario["givenName"][0]+" "+usuario["sn"][0],"("+usuario["uid"][0]+")")
                     
@@ -52,6 +53,6 @@ if len(sys.argv)==3 and (sys.argv[1]=='-a' or sys.argv[1]=='-d'):
 else:
     print("python3 app.py [-a/-d] [usuario/grupo]")
     print("Indica -a para añadir usuarios o -d para eliminar.")
-    print("Debes indicar el id de un usuario o grupo ['asir1','asir2','smr2','profesores'].")
+    print("Debes indicar el id de un usuario o grupo ['asir1','asir2','smr2','profesores','tituladossmr','tituladosasir','antiguosalumnos'].")
 
 
